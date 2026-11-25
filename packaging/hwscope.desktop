@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=HWScope
+GenericName=Monitor de Hardware
+Comment=Temperaturas, uso e informações de CPU, GPU, memória e discos
+Exec=hwscope
+Icon=hwscope
+Categories=System;Monitor;
+Keywords=temperature;sensors;cpu;gpu;hardware;monitor;temperatura;
+Terminal=false
+StartupWMClass=hwscope

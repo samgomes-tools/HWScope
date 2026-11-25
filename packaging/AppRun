@@ -1,0 +1,20 @@
+#!/bin/bash
+# HWScope AppRun
+if [ -z "${APPDIR}" ]; then
+    self=$(readlink -f -- "$0")
+    export APPDIR="${self%/*}"
+fi
+export HWSCOPE_ORIG_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
+# Bibliotecas xcb que costumam faltar em instalações mínimas (usadas pelo Qt)
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${APPDIR}/usr/lib/hwscope-qt"
+export SSL_CERT_FILE="${APPDIR}/opt/_internal/certs.pem"
+unset PYTHONHOME PYTHONPATH QT_PLUGIN_PATH
+# Wayland quando disponível; senão X11
+if [ -z "${QT_QPA_PLATFORM}" ]; then
+    if [ -n "${WAYLAND_DISPLAY}" ]; then
+        export QT_QPA_PLATFORM="wayland;xcb"
+    else
+        export QT_QPA_PLATFORM="xcb;wayland"
+    fi
+fi
+exec "${APPDIR}/opt/python3.12/bin/python3.12" -s -B "${APPDIR}/opt/hwscope/main.py" "$@"
